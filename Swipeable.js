@@ -16,6 +16,8 @@ export type PropType = {
   friction: number,
   leftThreshold?: number,
   rightThreshold?: number,
+  forceLeftActionThreshold?: number,
+  forceRightActionThreshold?: number,
   overshootLeft?: boolean,
   overshootRight?: boolean,
   overshootFriction: number,
@@ -27,6 +29,8 @@ export type PropType = {
   onSwipeableRightWillOpen?: Function,
   onSwipeableWillOpen?: Function,
   onSwipeableWillClose?: Function,
+  onForceLeftAction?: Function,
+  onForceRightAction?: Function,
   renderLeftActions?: (
     progressAnimatedValue: any,
     dragAnimatedValue: any
@@ -174,6 +178,8 @@ export default class Swipeable extends Component<PropType, StateType> {
       friction,
       leftThreshold = leftWidth / 2,
       rightThreshold = rightWidth / 2,
+      forceLeftActionThreshold = leftWidth * 1.25,
+      forceRightActionThreshold = rightWidth * 1.25,
     } = this.props;
 
     const startOffsetX = this._currentOffset() + dragX / friction;
@@ -181,10 +187,17 @@ export default class Swipeable extends Component<PropType, StateType> {
 
     let toValue = 0;
     if (rowState === 0) {
-      if (translationX > leftThreshold) {
+      if (translationX > forceLeftActionThreshold && this.props.onForceLeftAction) {
+        toValue = 0;
+        this.props.onForceLeftAction();
+      }
+      else if (translationX > leftThreshold) {
         toValue = leftWidth;
-      } else if (translationX < -rightThreshold) {
-        toValue = -rightWidth;
+      } else if (translationX < -forceRightActionThreshold) {
+        
+      } else if (translationX < -rightThreshold && this.props.onForceRightAction) {
+        toValue = 0;
+        this.props.onForceRightAction();
       }
     } else if (rowState === 1) {
       // swiped to left

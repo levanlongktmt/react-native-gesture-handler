@@ -470,6 +470,8 @@ declare module 'react-native-gesture-handler/Swipeable' {
     friction?: number;
     leftThreshold?: number;
     rightThreshold?: number;
+    forceLeftActionThreshold?: number;
+    forceRightActionThreshold?: number;
     overshootLeft?: boolean;
     overshootRight?: boolean;
     overshootFriction?: number,
@@ -481,6 +483,8 @@ declare module 'react-native-gesture-handler/Swipeable' {
     onSwipeableRightWillOpen?: () => void;
     onSwipeableWillOpen?: () => void;
     onSwipeableWillClose?: () => void;
+    onForceLeftAction?: () => void;
+    onForceRightAction?: () => void;
     /**
      *
      * This map describes the values to use as inputRange for extra interpolation:
